@@ -1,4 +1,5 @@
-import {Observable, Observer} from 'rxjs';
+import {from, Observable, Observer, range} from 'rxjs';
+import {filter, map, reduce} from "rxjs/operators";
 export const hello = (nom: string) => {
     console.log('Bienvenu ' + nom);
 }
@@ -30,5 +31,41 @@ export const sourisVerte = (conteneur: Element) => {
 
 
 export const exo1 = (lb: number, hb: number) => {
-
+    const numbers = range(lb, hb);
+    numbers.subscribe(x => console.log(x));
 }
+
+export const exo2 = (lb: number, hb: number) => {
+    const numbers = range(lb, hb);
+    numbers.pipe(filter(val => val % 2 === 0)).subscribe(x => console.log(x));
+}
+export const exo3 = (lb: number, hb: number) => {
+    const numbers = range(lb, hb);
+    const nombresImpaires = numbers.pipe(filter(val => val % 2 !== 0));
+    nombresImpaires.pipe(map(x => x * 2 + 1)).subscribe(x => console.log(x));
+}
+
+export const fibo = (n: number) => {
+    let fibon = new Observable((observer: Observer<any>) => {
+        let x1: number = 0;
+        let x2: number = 1;
+        observer.next(x1);
+        observer.next(x2);
+        let tmp: number;
+        for (let i: number = 0 ; i < n ; i++) {
+            tmp = x1;
+            x1 = x2;
+            x2 = x1 + tmp;
+            observer.next(x2);
+        }
+        observer.complete();
+    })
+
+    fibon.subscribe( x => console.log(x));
+}
+
+export const moyenne = (notes: number[]) => {
+    const tabNotes = from(notes).pipe(reduce( (x, y) => x + y ),map( x => x / notes.length)).subscribe(x => console.log(x));
+}
+
+
