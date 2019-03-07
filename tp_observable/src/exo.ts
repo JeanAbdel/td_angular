@@ -1,5 +1,5 @@
-import {from, Observable, Observer, range} from 'rxjs';
-import {filter, map, reduce} from "rxjs/operators";
+import {from, interval, Observable, Observer, range} from 'rxjs';
+import {filter, map, reduce, take} from "rxjs/operators";
 export const hello = (nom: string) => {
     console.log('Bienvenu ' + nom);
 }
@@ -27,23 +27,23 @@ export const sourisVerte = (conteneur: Element) => {
         li.appendChild(text);
         conteneur.appendChild(li);
     })
-}
+};
 
 
 export const exo1 = (lb: number, hb: number) => {
     const numbers = range(lb, hb);
     numbers.subscribe(x => console.log(x));
-}
+};
 
 export const exo2 = (lb: number, hb: number) => {
     const numbers = range(lb, hb);
     numbers.pipe(filter(val => val % 2 === 0)).subscribe(x => console.log(x));
-}
+};
 export const exo3 = (lb: number, hb: number) => {
     const numbers = range(lb, hb);
     const nombresImpaires = numbers.pipe(filter(val => val % 2 !== 0));
     nombresImpaires.pipe(map(x => x * 2 + 1)).subscribe(x => console.log(x));
-}
+};
 
 export const fibo = (n: number) => {
     let fibon = new Observable((observer: Observer<any>) => {
@@ -59,13 +59,35 @@ export const fibo = (n: number) => {
             observer.next(x2);
         }
         observer.complete();
-    })
+    });
 
     fibon.subscribe( x => console.log(x));
+};
+
+function drawRect(ctx: CanvasRenderingContext2D, xPos: number, yPos: number, width: number, height: number, thickness = 1) {
+    ctx.fillStyle = '#d3d3d3';
+    ctx.fillRect(xPos - (thickness), yPos - (thickness), width + (thickness * 2), height + (thickness * 2));
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(xPos, yPos, width, height);
 }
 
+
+
+export const progress = (canvas: HTMLCanvasElement) => {
+    console.log("exo progress: " + canvas);
+    let x = 20, y = 20, w = 300, h = 50;
+    let ctx = canvas.getContext("2d");
+    drawRect(ctx, x, y, w, h, 1); // On dessine le rectangle principal
+    ctx.fillStyle = 'blue'; // On change la couleur de remplissage
+    const numbers = interval(1000).pipe(take(301));
+    numbers.subscribe(w => ctx.fillRect(x, y, w, h));
+    };
+
+
+
+/*
 export const moyenne = (notes: number[]) => {
     const tabNotes = from(notes).pipe(reduce( (x, y) => x + y ),map( x => x / notes.length)).subscribe(x => console.log(x));
-}
-
+};
+*/
 

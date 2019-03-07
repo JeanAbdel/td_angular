@@ -1,4 +1,5 @@
-import {exo2, exo1, hello, sourisVerte, exo3, fibo, moyenne} from "./exo";
+// import {exo2, exo1, hello, sourisVerte, exo3, fibo, moyenne, progress} from "./exo";
+import {exo2, exo1, hello, sourisVerte, exo3, fibo, progress} from "./exo";
 
 export class Main {
     constructor() {
@@ -11,8 +12,12 @@ export class Main {
         const conteneur = document.querySelector('#chanson');
         sourisVerte(conteneur);
         fibo(10);
-        moyenne(this.notes);
+        // moyenne(this.notes);
+        const canvas = <HTMLCanvasElement>document.querySelector('#progress');
+        progress(canvas);
     }
+
+
 
 }
 
